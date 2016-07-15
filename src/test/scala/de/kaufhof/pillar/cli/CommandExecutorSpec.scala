@@ -15,22 +15,32 @@ class CommandExecutorSpec extends FunSpec with BeforeAndAfter with MockitoSugar 
     val registry = mock[Registry]
     val reporter = mock[Reporter]
     val migrator = mock[Migrator]
+    val simpleStrategy = SimpleStrategy()
+    val networkTopologyStrategy = NetworkTopologyStrategyTestData.networkTopologyStrategy
     val migratorConstructor = mock[((Registry, Reporter) => Migrator)]
     stub(migratorConstructor.apply(registry, reporter)).toReturn(migrator)
     val executor = new CommandExecutor()(migratorConstructor)
 
     describe("an initialize action") {
-      val command = Command(Initialize, session, keyspace, None, registry)
+      val commandSimple = Command(Initialize, session, keyspace, None, registry, simpleStrategy)
 
-      executor.execute(command, reporter)
+      executor.execute(commandSimple, reporter)
 
-      it("initializes") {
-        verify(migrator).initialize(session, keyspace)
+      it("initializes a simple strategy") {
+        verify(migrator).initialize(session, keyspace, simpleStrategy)
+      }
+
+      val commandNetwork = Command(Initialize, session, keyspace, None, registry, networkTopologyStrategy)
+
+      executor.execute(commandNetwork, reporter)
+
+      it("initializes a network topology strategy") {
+        verify(migrator).initialize(session, keyspace, networkTopologyStrategy)
       }
     }
 
     describe("a migrate action without date restriction") {
-      val command = Command(Migrate, session, keyspace, None, registry)
+      val command = Command(Migrate, session, keyspace, None, registry, simpleStrategy)
 
       executor.execute(command, reporter)
 
@@ -41,7 +51,7 @@ class CommandExecutorSpec extends FunSpec with BeforeAndAfter with MockitoSugar 
 
     describe("a migrate action with date restriction") {
       val date = new Date()
-      val command = Command(Migrate, session, keyspace, Some(date.getTime), registry)
+      val command = Command(Migrate, session, keyspace, Some(date.getTime), registry, simpleStrategy)
 
       executor.execute(command, reporter)
 

@@ -14,11 +14,12 @@ class PrintStreamReporterSpec extends FunSpec with MockitoSugar with Matchers wi
   val stream = new PrintStream(output)
   val reporter = new PrintStreamReporter(stream)
   val keyspace = "myks"
+  val replicationStrategy = SimpleStrategy()
   val nl = System.lineSeparator()
 
   describe("#initializing") {
     it("should print to the stream") {
-      reporter.initializing(session, keyspace, ReplicationOptions.default)
+      reporter.initializing(session, keyspace, replicationStrategy)
       output.toString should equal(s"Initializing myks${nl}")
     }
   }

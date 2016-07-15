@@ -12,8 +12,8 @@ class CassandraMigrator(registry: Registry) extends Migrator {
     selectMigrationsToApply(dateRestriction, appliedMigrations).foreach(_.executeUpStatement(session))
   }
 
-  override def initialize(session: Session, keyspace: String, replicationOptions: ReplicationOptions = ReplicationOptions.default) {
-    executeIdempotentCommand(session, "CREATE KEYSPACE %s WITH replication = %s".format(keyspace, replicationOptions.toString()))
+  override def initialize(session: Session, keyspace: String, replicationStrategy: ReplicationStrategy) {
+    executeIdempotentCommand(session, s"CREATE KEYSPACE $keyspace WITH replication = ${replicationStrategy.toString()}")
     executeIdempotentCommand(session,
       """
         | CREATE TABLE %s.applied_migrations (

@@ -13,15 +13,15 @@ class ReportingMigratorSpec extends FunSpec with MockitoSugar {
   val keyspace = "myks"
 
   describe("#initialize") {
-    val replicationOptions = mock[ReplicationOptions]
-    migrator.initialize(session, keyspace, replicationOptions)
+    val replicationStrategy = SimpleStrategy()
+    migrator.initialize(session, keyspace, replicationStrategy)
 
     it("reports the initialize action") {
-      verify(reporter).initializing(session, keyspace, replicationOptions)
+      verify(reporter).initializing(session, keyspace, replicationStrategy)
     }
 
     it("delegates to the wrapped migrator") {
-      verify(wrapped).initialize(session, keyspace, replicationOptions)
+      verify(wrapped).initialize(session, keyspace, replicationStrategy)
     }
   }
 
