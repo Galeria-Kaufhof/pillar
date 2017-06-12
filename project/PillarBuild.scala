@@ -18,7 +18,6 @@ object PillarBuild extends Build {
   val dependencies = Seq(
     "com.datastax.cassandra" % "cassandra-driver-core" % "3.1.2",
     "com.typesafe" % "config" % "1.0.1",
-    "org.clapper" %% "argot" % "1.0.3",
     "org.mockito" % "mockito-core" % "1.9.5" % "test",
     "org.scalatest" %% "scalatest" % "2.2.0" % "test",
     "org.cassandraunit" % "cassandra-unit" % "3.0.0.1" % "test",
@@ -66,7 +65,7 @@ object PillarBuild extends Build {
   ).settings(
     assemblyMergeStrategySetting,
     assemblyTestSetting,
-    libraryDependencies := dependencies,
+    libraryDependencies ++= dependencies,
     name := "pillar",
     organization := "de.kaufhof",
     version := "4.0.0",
@@ -111,6 +110,11 @@ object PillarBuild extends Build {
           <id>muellenborn</id>
           <name>Markus Müllenborn</name>
           <url>https://github.com/muellenborn</url>
+        </developer>
+        <developer>
+          <id>fbe</id>
+          <name>Felix Becker</name>
+          <url>https://github.com/fbe</url>
         </developer>
       </developers>
     )
