@@ -20,10 +20,10 @@ final case class NetworkTopologyStrategy(dataCenters: Seq[CassandraDataCenter]) 
 
   override def cql: String = {
     val replicationFacString = dataCenters.map { dc =>
-      s"'${dc.name}' : ${dc.replicationFactor} "
-    }.mkString(", ")
+      s"'${dc.name}' : ${dc.replicationFactor}"
+    }.mkString(" , ")
 
-    s"{'class' : 'NetworkTopologyStrategy', $replicationFacString }"
+    s"{'class' : 'NetworkTopologyStrategy', $replicationFacString}"
   }
 }
 
